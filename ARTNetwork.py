@@ -46,28 +46,32 @@ class ARTNetwork:
 
     def learn(self, data_set, cycles: int):
         for i in range(cycles):
-            Mask = np.ones(len(self.Weights_T))
+            current_x = data_set[i % len(data_set)]
+            self.Mask = np.ones(len(self.Weights_T))
             go_back = True
-            while(max(Mask) > 0 and go_back):
-                best_category_index = self.__choose_best_category(data_set[i % len(data_set)])
-                if self.__compare_input(data_set[i % len(data_set)], self.Weights_T[best_category_index]):
-                    return#delete
-                    #Recognized
-                else:
+            while(go_back):
+                best_category_index = self.__choose_best_category(current_x)
+                if self.__compare_input(current_x, pattern=self.Weights_T[best_category_index], threshold=self.vigilance_parameter) == False:
                     # Not recognized, try again with another category (if available). If not possible - create new category
-                    continue
-            if max(Mask) == 0:
-                return#delete
-                #Create new category
-        return
+                    self.Mask[best_category_index] = 0
+                    if max(self.Mask) > 0:
+                        go_back = True
+                        continue
+                    else:
+                        self.__insert_new_category()
+                        best_category_index = len(self.Mask)
+                self.__update_weights_T(current_x, best_category_index)
+                self.__update_weights_W(current_x, best_category_index)
 
     @staticmethod
     def __compare_input(x, pattern, threshold):
-        return np.divide(np.multiply(x,pattern),np.sum(x)) <= threshold
+        return np.divide(np.multiply(x,pattern),np.sum(x)) > threshold
 
     def __choose_best_category(self, x):
         for j in range(len(self.Weights_T)):
             self.Probability[j] = 0.0
+            if self.Mask[j] == 0:
+                continue
             for i in range(len(x)):
                 self.Probability[j] += self.Weights_W[i,j] * x[i]
         return self.Probability.index(max(self.Probability))
