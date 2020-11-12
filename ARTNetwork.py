@@ -22,7 +22,7 @@ class ARTNetwork:
 #Theta - kind of threshold
      # 0 < theta < 1
 
-    def __init__(self,_input_size: int, _init_output_size:int = 1, _vp:float = 0.9, _a: float = 10, _b: float = 10, _c: float = 0.1, _theta: float = 0.0):
+    def __init__(self, _input_size: int, _init_output_size:int = 1, _vp:float = 0.9, _a: float = 10, _b: float = 10, _c: float = 0.1, _theta: float = 0.0):
         self.vigilance_parameter = _vp
         self.a =_a
         self.b =_b
