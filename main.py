@@ -22,8 +22,13 @@ def modify_data_for_clustering(raw_data, move):
         raw_data = np.transpose(raw_data)
 
         for i in range(len(raw_data)):
-            mean = (np.max(raw_data[i]) - np.min(raw_data[i])) / 2
+            if len(means) > 0:
+                mean = (np.max(raw_data[i]) - np.min(raw_data[i])) / 2
+                means.append(mean)
+            else:
+                mean = means[i]
             raw_data[i] = np.add(raw_data[i], -mean)
+
 
         raw_data = np.transpose(raw_data)
     new_data = list()
@@ -50,6 +55,7 @@ def load_csv(filename):
 
     return _data
 
+
 def data_to_compare(path, move):
     raw_data = load_csv(path)[1:]
 
@@ -61,45 +67,21 @@ def data_to_compare(path, move):
 
     return data, classification
 
+
 if __name__ == '__main__':
-    path1 = 'clustering/cube.csv'
-    path2 = 'clustering/cube-notmatching.csv'
+    train_x_path = 'HAPT/Train/X_train.txt'
+    train_y_path = 'HAPT/Train/y_train.txt'
+    train_subjects_path = 'HAPT/Train/subject_id_train.txt'
 
-    # train_X, train_y = loadlocal_mnist(
-    #     images_path='MNIST\\train-images.idx3-ubyte',
-    #     labels_path='MNIST\\train-labels.idx1-ubyte')
+    test_x_path = 'HAPT/Test/X_test.txt'
+    test_y_path = 'HAPT/Test/y_test.txt'
+    test_subjects_path = 'HAPT/Test/subject_id_test.txt'
 
-    raw_data = load_csv(path1)[1:]
-    data_dim = len(raw_data[0]) - 1
+    train_x = load_csv(train_x_path)
+    train_y = load_csv(train_y_path)
 
-    classification = list()
-    predictions = list()
 
-    for i in range(len(raw_data)):
-       classification.append(raw_data[i].pop())
 
-    #raw_data = mix_data(raw_data, 8, 150, True)
-    #network = ARTNetwork(_input_size=len(raw_data[0]), _init_output_size=2)
-    #network.learn(data_set=raw_data, cycles=1200)
 
-    new_data = modify_data_for_clustering(raw_data, move=False)
 
-    network = ART2(len(new_data[0]), 10)
-    for i in range(1):
-        for data in new_data:
-            network.present(data, True)
 
-    compares, classification2 = data_to_compare(path2, False)
-
-    for data in compares:
-        predictions.append(network.present(data, False))
-
-    if data_dim == 2:
-        V.visual_2D_clusters(raw_data, classification, predictions)
-    if data_dim == 3:
-        V.visual_3D_clusters(compares, classification2)
-        V.visual_3D_clusters(compares, predictions)
-
-    set1 = set(predictions)
-    print("Classes created:", len(set1))
-    print("Actual classes:", len(set(classification)))
