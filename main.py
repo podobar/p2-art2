@@ -60,14 +60,20 @@ if __name__ == '__main__':
     classification = list()
     predictions = list()
 
-    for i in range(len(train_data)):
+    for i in range(len(train_data)-1, -1, -1):
+        # if train_data[i][0] == 8 or train_data[i][0] == 9:  #Optional deleting classes of '8' and '9' for further testing on unknown data
+        # if train_data[i][0] == 0 or train_data[i][0] == 1:  # Optional deleting classes of '0' and '1' for further testing on unknown data
+        # if train_data[i][0] == 5 or train_data[i][0] == 6:  # Optional deleting classes of '5' and '6' for further testing on unknown data
+        # if train_data[i][0] == 1 or train_data[i][0] == 2: # Optional deleting classes of '1' and '2' for further testing on unknown data
+        #     train_data.pop(i)
+        # else:
         train_data[i].pop(0)
         train_data[i] = list(map(int, train_data[i]))
     for i in range(len(test_data)):
         test_data[i] = list(map(int, test_data[i]))
         classification.append(test_data[i].pop(0))
 
-    network = ART2(data_dim, 5)
+    network = ART2(data_dim, 10)
     #Learn
     for data in train_data:
         network.present(data, learn=True)

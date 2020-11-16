@@ -10,7 +10,7 @@ class ART2:
     e = sys.float_info.epsilon
     theta = 0
     alpha = 0
-    vigilance = 0.99
+    vigilance = 0.92
     B = list()
     T = list()
 

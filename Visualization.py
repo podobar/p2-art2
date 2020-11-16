@@ -79,4 +79,3 @@ class Visualization:
         plt.xlabel('Numer klastra')
         plt.ylabel('Ilość dopasowań')
         plt.show()
-        return
