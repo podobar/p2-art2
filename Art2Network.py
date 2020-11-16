@@ -10,7 +10,7 @@ class ART2:
     e = sys.float_info.epsilon
     theta = 0
     alpha = 0
-    vigilance = 0.98
+    vigilance = 0.99
     B = list()
     T = list()
 
@@ -58,7 +58,7 @@ class ART2:
                     self.T[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1))*self.T[J]
                     self.B[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1))*self.B[J]
                 reset = False
-        return J
+        return int(J)
 
     def f(self, vector):
         return np.array([v if v > self.theta else 0 for v in vector])

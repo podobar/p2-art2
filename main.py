@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 from Visualization import Visualization as V
-from ARTNetwork import ARTNetwork
 from Art2Network import ART2
 
 
@@ -50,44 +49,40 @@ def load_csv(filename):
 
 
 if __name__ == '__main__':
-    path = 'clustering/mnist_test.csv'
+    train_path = 'clustering/mnist_train.csv'
+    test_path = 'clustering/mnist_test.csv'
 
-    # train_X, train_y = loadlocal_mnist(
-    #     images_path='MNIST\\train-images.idx3-ubyte',
-    #     labels_path='MNIST\\train-labels.idx1-ubyte')
-
-    raw_data = load_csv(path)
-    data_dim = len(raw_data[0]) - 1
-    raw_data = sorted(raw_data, key=lambda x: int(x[0]))
+    #Optional sorting of learning data
+    # raw_data = sorted(load_csv(train_path), key=lambda x: int(x[0]))
+    train_data = load_csv(train_path)
+    test_data = load_csv(test_path)
+    data_dim = len(train_data[0]) - 1
     classification = list()
     predictions = list()
 
-    for i in range(len(raw_data)):
-        classification.append(int(raw_data[i].pop(0)))
-        raw_data[i] = list(map(int, raw_data[i]))
-    #raw_data = mix_data(raw_data, 8, 150, True)
-    #network = ARTNetwork(_input_size=len(raw_data[0]), _init_output_size=2)
-    #network.learn(data_set=raw_data, cycles=1200)
+    for i in range(len(train_data)):
+        train_data[i].pop(0)
+        train_data[i] = list(map(int, train_data[i]))
+    for i in range(len(test_data)):
+        test_data[i] = list(map(int, test_data[i]))
+        classification.append(test_data[i].pop(0))
 
-    #new_data = modify_data_for_clustering(raw_data)
-    new_data=raw_data
-    network = ART2(len(new_data[0]), 10)
-    # for i in range(50):
-    #     for data in new_data:
-    #         network.present(data, True)
-
-    for data in new_data:
-        predictions.append(network.present(data, False))
+    network = ART2(data_dim, 5)
+    #Learn
+    for data in train_data:
+        network.present(data, learn=True)
+    #Test
+    for data in test_data:
+        predictions.append(network.present(data, learn=False))
 
     if data_dim == 2:
-        V.visual_2D_clusters(raw_data, classification, predictions)
+        V.visual_2D_clusters(train_data, classification, predictions)
     if data_dim == 3:
-        V.visual_3D_clusters(raw_data, classification)
-        V.visual_3D_clusters(raw_data, predictions)
+        V.visual_3D_clusters(train_data, classification)
+        V.visual_3D_clusters(train_data, predictions)
     if data_dim == 28*28:
-        V.show_MNIST_bitmap(raw_data[0])
         V.show_LTM_state(network.T)
-        V.show_LTM_state(network.B)
+        V.show_clusterization_results(classification, predictions)
 
     print("Classes created:", np.max(predictions)+1)
     print("Actual classes:", np.max(classification)+1)
