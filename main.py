@@ -17,26 +17,24 @@ def mix_data(data, n_class, samples_per_class, have_to_mix):
     return data_reordered
 
 
-def modify_data_for_clustering(raw_data):
-    # raw_data = np.transpose(raw_data)
-    #
-    # for i in range(len(raw_data)):
-    #     mean = (np.max(raw_data[i]) - np.min(raw_data[i])) / 2
-    #     raw_data[i] = np.add(raw_data[i], -mean)
-    #
-    # raw_data = np.transpose(raw_data)
-    new_data = list()
+def compute_means(raw_data):
+    raw_data = np.transpose(raw_data)
 
-    for data in raw_data:
+    for i in range(len(raw_data)):
+        mean = np.mean(raw_data[i]) #(np.max(raw_data[i]) + np.min(raw_data[i])) / 2
+        means.append(mean)
+    return means
 
-        for i in range(len(data)):
-            if data[i] >= 0:
-                data = np.append(data, 0)
-            else:
-                data = np.append(data, -data[i])
-                data[i] = 0
-        new_data.append(data)
-    return new_data
+
+def modify_data_for_clustering(raw_data, means, move):
+    raw_data = np.transpose(raw_data)
+
+    if move:
+        for i in range(len(raw_data)):
+            mean = means[i]
+            raw_data[i] = np.add(raw_data[i], -mean)
+
+    return np.transpose(raw_data)
 
 
 def load_csv(filename):
@@ -53,10 +51,6 @@ def load_csv(filename):
 if __name__ == '__main__':
     path = 'clustering/cube.csv'
 
-    # train_X, train_y = loadlocal_mnist(
-    #     images_path='MNIST\\train-images.idx3-ubyte',
-    #     labels_path='MNIST\\train-labels.idx1-ubyte')
-
     raw_data = load_csv(path)[1:]
     data_dim = len(raw_data[0]) - 1
 
@@ -69,8 +63,10 @@ if __name__ == '__main__':
     #raw_data = mix_data(raw_data, 8, 150, True)
     #network = ARTNetwork(_input_size=len(raw_data[0]), _init_output_size=2)
     #network.learn(data_set=raw_data, cycles=1200)
+    means = list()
+    means = compute_means(raw_data)
 
-    new_data = modify_data_for_clustering(raw_data)
+    new_data = modify_data_for_clustering(raw_data, means, True)
 
     network = ART2(len(new_data[0]), 10)
     for i in range(10):

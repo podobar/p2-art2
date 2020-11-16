@@ -17,7 +17,7 @@ class ART2:
     classes = 1
 
     def __init__(self, M, N):
-        self.theta = 0.8/np.sqrt(M)
+        self.theta = 1/np.sqrt(M)
         self.alpha = 1/np.sqrt(M)
 
         self.T = np.zeros([N, M])
