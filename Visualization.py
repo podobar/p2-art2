@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 class Visualization:
 
@@ -43,4 +43,19 @@ class Visualization:
 
         axs[0].scatter(PointX, PointY, c=colors_predicted, cmap='cool', marker=".")
         axs[1].scatter(PointX, PointY, c=colors_test, cmap='cool', marker=".")
+        plt.show()
+
+    @staticmethod
+    def show_MNIST_bitmap(data: list):
+        plt.imshow(np.reshape(np.asarray(data),(28,28)), cmap='gray')
+        plt.show()
+    @staticmethod
+    def show_LTM_state(LTM: list):
+        N = len(LTM[0])
+        M = len(LTM)
+        fig=plt.figure(figsize=(28,28))
+        for i in range(M):
+            img = np.reshape(np.asarray(LTM[i]), (28,28))
+            fig.add_subplot(1, M, i+1)
+            plt.imshow(img,cmap='gray')
         plt.show()

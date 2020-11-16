@@ -26,7 +26,6 @@ class ART2:
     def present(self, s, learn):
         norm = self.norm
         classes = self.classes
-        committed = np.zeros()
         w = s
         x = np.divide(w, (norm(w) + self.e))
         v = self.f(x)
