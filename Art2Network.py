@@ -17,16 +17,16 @@ class ART2:
     classes = 1
 
     def __init__(self, M, N):
-        self.theta = 1/np.sqrt(M)
+        self.theta = 0.8/np.sqrt(M)
         self.alpha = 1/np.sqrt(M)
 
         self.T = np.zeros([N, M])
-        self.B = np.random.rand(N, M) * (1/(1-self.d) * self.theta)
+        self.B = np.random.rand(N, M)  #* (1/(1-self.d) * self.theta)
 
     def present(self, s, learn):
         norm = self.norm
         classes = self.classes
-        committed = np.zeros()
+
         w = s
         x = np.divide(w, (norm(w) + self.e))
         v = self.f(x)
@@ -62,7 +62,7 @@ class ART2:
         return J
 
     def f(self, vector):
-        return np.array([v if v > self.theta else 0 for v in vector])
+        return np.array([v if np.abs(v) > self.theta else 0 for v in vector])
 
     @staticmethod
     def norm(vector):

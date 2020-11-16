@@ -51,7 +51,7 @@ def load_csv(filename):
 
 
 if __name__ == '__main__':
-    path = 'clustering/hexagon.csv'
+    path = 'clustering/cube.csv'
 
     # train_X, train_y = loadlocal_mnist(
     #     images_path='MNIST\\train-images.idx3-ubyte',
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     new_data = modify_data_for_clustering(raw_data)
 
     network = ART2(len(new_data[0]), 10)
-    for i in range(50):
+    for i in range(10):
         for data in new_data:
             network.present(data, True)
 
@@ -86,5 +86,5 @@ if __name__ == '__main__':
         V.visual_3D_clusters(raw_data, classification)
         V.visual_3D_clusters(raw_data, predictions)
 
-    print("Classes created:", np.max(predictions))
-    print("Actual classes:", np.max(classification))
+    print("Classes created:", len(set(predictions)))
+    print("Actual classes:", len(set(classification)))
