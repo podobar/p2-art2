@@ -10,14 +10,14 @@ class ART2:
     e = sys.float_info.epsilon
     theta = 0
     alpha = 0
-    vigilance = 0.98
+    vigilance = 0.99
     B = list()
     T = list()
 
     classes = 0
 
     def __init__(self, M, N):
-        self.theta = 0.7/np.sqrt(M)
+        self.theta = 0.3 #0.7/np.sqrt(M)
         self.alpha = 1/np.sqrt(M)
 
         self.T = np.zeros([N, M])

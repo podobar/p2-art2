@@ -62,7 +62,7 @@ def load_csv(filename):
 
 
 if __name__ == '__main__':
-    path = 'clustering/hexagon.csv'
+    path = 'clustering/cube.csv'
 
     raw_data = load_csv(path)[1:]
     data_dim = len(raw_data[0]) - 1
