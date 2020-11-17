@@ -92,12 +92,14 @@ if __name__ == '__main__':
     new_test_y = list()
 
     for i in range(len(train_subjects)):
-        new_train_x.append(train_x[i])
-        new_train_y.append(train_y[i])
+        if train_subjects[i]==selected_subject:
+            new_train_x.append(train_x[i])
+            new_train_y.append(train_y[i])
 
     for i in range(len(test_subjects)):
-        new_test_x.append(test_x[i])
-        new_test_y.append(test_y[i])
+        if train_subjects[i]==selected_subject:
+            new_test_x.append(test_x[i])
+            new_test_y.append(test_y[i])
 
     nclass = len(set(new_train_y))
 
