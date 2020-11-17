@@ -10,7 +10,7 @@ class ART2:
     e = sys.float_info.epsilon
     theta = 0
     alpha = 0
-    vigilance = 0.98
+    vigilance = 0.99
     B = list()
     T = list()
 
@@ -26,6 +26,7 @@ class ART2:
     def present(self, s, learn):
         norm = self.norm
         classes = self.classes
+
         w = s
         x = np.divide(w, (norm(w) + self.e))
         v = self.f(x)
@@ -35,29 +36,34 @@ class ART2:
         x = np.divide(w, (norm(w) + self.e))
         p = u
         q = np.divide(p, (norm(p) + self.e))
-        v = self.f(x) + self.f(q) * self. b
+        v = self.f(x) + self.f(q) * self.b
 
-        y = np.dot(self.B, p)
+        y = np.dot(self.B, p)[0:max(classes, 1)]
         reset = True
-
+        J = 0
         while reset:
-            if np.max(y) == -1:
-                return -1
-            J = np.argmax(y)
-            u = np.divide(v, (norm(v) + self.e))
-            p = u + self.T[J] * self.d
-            r = np.add(u, self.c * p) / (self.e + norm(u) + self.c * norm(p))
-            n = norm(r)
-            if (n < (self.vigilance - self.e)) & (J <= classes):
-                y[J] = -1
-            else:
-                if J > classes:
+            if (np.max(y) == -1) or (classes == 0):
+                if classes == len(self.B) - 1:
+                    return -1
+                else:
+                    self.classes += 1
+                    classes += 1
                     J = classes
-                    self.classes = classes + 1
-                if learn:
-                    self.T[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1))*self.T[J]
-                    self.B[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1))*self.B[J]
-                reset = False
+                    reset = False
+            else:
+                J = np.argmax(y)
+                u = np.divide(v, (norm(v) + self.e))
+                p = u + self.T[J] * self.d
+                r = np.add(u, self.c * p) / (self.e + norm(u) + self.c * norm(p))
+                n = norm(r)
+                if n < (self.vigilance - self.e):
+                    y[J] = -1
+                else:
+                    reset = False
+        if learn:
+            self.T[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1)) * self.T[J]
+            self.B[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1)) * self.B[J]
+
         return J
 
     def f(self, vector):

@@ -115,14 +115,20 @@ if __name__ == '__main__':
     for data in new_train_x:
         clusters.append(network.present(data, learn=False))
 
+    unclassified = 0
+
     result_tab = np.zeros([int(np.max(new_test_y)), int(np.max(clusters))])
     for i in range(len(new_test_y)):
-        result_tab[int(new_test_y[i])-1][int(clusters[i])-1] += 1
+        if int(clusters[i]) != -1:
+            result_tab[int(new_test_y[i])-1][int(clusters[i])-1] += 1
+        else:
+            unclassified += 1
 
     print(result_tab)
 
     print("Predicted:", len(set(clusters)))
     print("Actual:", len(set(new_test_y)))
+    print("Unclassified:", unclassified)
 
 
 
