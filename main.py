@@ -2,7 +2,9 @@ import csv
 import numpy as np
 from Visualization import Visualization as V
 from Art2Network import ART2
+import logging
 
+log_file_path = "logs\\history.log"
 
 def mix_data(data, n_class, samples_per_class, have_to_mix):
     if not have_to_mix:
@@ -49,6 +51,8 @@ def load_csv(filename):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename=log_file_path, level=logging.INFO)
+    logging.info('\nProgram started\n')
     train_path = 'clustering/mnist_train.csv'
     test_path = 'clustering/mnist_test.csv'
 

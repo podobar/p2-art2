@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-
+import logging
 
 class ART2:
     a = 10
@@ -23,7 +23,7 @@ class ART2:
         self.T = np.zeros([N, M])
         self.B = np.random.rand(N, M) * (1/(1-self.d) * self.theta)
 
-    def present(self, s, learn):
+    def present(self, s, learn, log: bool = False):
         norm = self.norm
         classes = self.classes
         w = s
@@ -39,8 +39,11 @@ class ART2:
 
         y = np.dot(self.B, p)
         reset = True
-
+        if log:
+            logging.info("\nNew iteration")
         while reset:
+            if log:
+                logging.info(y)
             if np.max(y) == -1:
                 return -1
             J = np.argmax(y)
@@ -50,6 +53,8 @@ class ART2:
             n = norm(r)
             if (n < (self.vigilance - self.e)) & (J <= classes):
                 y[J] = -1
+                if log:
+                    logging.info('Locked ' + str(J))
             else:
                 if J > classes:
                     J = classes
@@ -57,7 +62,11 @@ class ART2:
                 if learn:
                     self.T[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1))*self.T[J]
                     self.B[J] = self.alpha * self.d * u + (1 + self.alpha * self.d * (self.d - 1))*self.B[J]
+                    if log:
+                        logging.info('Updated ' + str(J))
                 reset = False
+        if log:
+            logging.info('Picked' + str(J))
         return int(J)
 
     def f(self, vector):
