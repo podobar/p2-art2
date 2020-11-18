@@ -62,7 +62,7 @@ def load_csv(filename):
 
 
 if __name__ == '__main__':
-    path = 'clustering/hexagon.csv'
+    path = 'clustering/cube.csv'
 
     raw_data = load_csv(path)[1:]
     data_dim = len(raw_data[0]) - 1
@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
     new_data = raw_data #modify_data_for_clustering(raw_data, means, False)
 
-    network = ART2(len(new_data[0]), 11)
+    network = ART2(len(new_data[0]), 10)
     for i in range(50):
         for data in new_data:
             network.present(data, True)
@@ -90,7 +90,8 @@ if __name__ == '__main__':
         predictions.append(network.present(data, False))
 
     if data_dim == 2:
-        V.visual_2D_clusters(raw_data, classification, predictions)
+        V.visual_2D_clusters(raw_data, classification)
+        V.visual_2D_clusters(raw_data, predictions)
 
     if data_dim == 3:
         V.visual_3D_clusters(raw_data, classification)

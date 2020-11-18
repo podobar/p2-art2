@@ -17,11 +17,11 @@ class ART2:
     classes = 0
 
     def __init__(self, M, N):
-        self.theta = 0.7/np.sqrt(M)
+        self.theta = 0.3 #/np.sqrt(M)
         self.alpha = 1/np.sqrt(M)
 
         self.T = np.zeros([N, M])
-        self.B = np.ones([N, M]) * (1/(1-self.d) * self.alpha)
+        self.B = np.random.rand(N, M) * (1/(1-self.d) * self.alpha)
 
     def present(self, s, learn):
         norm = self.norm

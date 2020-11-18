@@ -24,12 +24,13 @@ class Visualization:
         plt.show()
 
     @staticmethod
-    def visual_2D_clusters(data2D, classes, predicted):
-        fig, axs = plt.subplots(1, 2)
-        fig.tight_layout(pad=3.0)
+    def visual_2D_clusters(data2D, predicted):
+        # fig, axs = plt.subplots(1, 2)
+        # fig.tight_layout(pad=3.0)
+        ax = plt.axes()
 
-        axs[0].set_title('Predictions')
-        axs[1].set_title('Test set')
+        ax.set_title('Predictions')
+        ax.set_title('Test set')
 
         PointX = list()
         PointY = list()
@@ -39,8 +40,8 @@ class Visualization:
             PointY.append(data[1])
 
         colors_predicted = predicted
-        colors_test = classes
+        #colors_test = classes
 
-        axs[0].scatter(PointX, PointY, c=colors_predicted, cmap='cool', marker=".")
-        axs[1].scatter(PointX, PointY, c=colors_test, cmap='cool', marker=".")
+        ax.scatter(PointX, PointY, c=colors_predicted, cmap='cool', marker=".")
+        #axs[1].scatter(PointX, PointY, c=colors_test, cmap='cool', marker=".")
         plt.show()
