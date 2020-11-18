@@ -117,10 +117,10 @@ if __name__ == '__main__':
 
     unclassified = 0
 
-    result_tab = np.zeros([int(np.max(new_test_y)), int(np.max(clusters))])
+    result_tab = np.zeros([int(np.max(new_test_y)), int(np.max(clusters)+2)])
     for i in range(len(new_test_y)):
         if int(clusters[i]) != -1:
-            result_tab[int(new_test_y[i])-1][int(clusters[i])-1] += 1
+            result_tab[int(new_test_y[i])-1][int(clusters[i])+1] += 1
         else:
             unclassified += 1
 
