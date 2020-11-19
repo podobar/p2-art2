@@ -21,7 +21,7 @@ class ART2:
         self.alpha = 1/np.sqrt(M)
 
         self.T = np.zeros([N, M])
-        self.B = np.random.rand(N, M) * (1/(1-self.d) * self.theta)
+        self.B = np.random.rand(N, M) * (1/(1-self.d) * self.alpha)
 
     def present(self, s, learn):
         norm = self.norm
